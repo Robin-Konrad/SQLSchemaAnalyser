@@ -1,1 +1,3 @@
 # SQLSchemaAnalyser
+---
+work in progress
