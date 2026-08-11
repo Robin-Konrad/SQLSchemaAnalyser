@@ -112,7 +112,7 @@ static string StripComments(string sqlstring)
 
 static string[] ParseStatements(string sqlstring)   // assumes comments already stripped from string
 {
-    StripComments(sqlstring);  // strip string of comments before parsing
+    sqlstring = StripComments(sqlstring);  // strip string of comments before parsing
 
     List<string> statements = [];
     StringBuilder current = new StringBuilder();   // current statement
