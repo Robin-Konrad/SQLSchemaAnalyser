@@ -1,5 +1,6 @@
 ﻿using Parsers;
-
+using Prompts;
+using System.Text.Json;
 // test
 string sqlstring = @"
 /* =========================================================
@@ -45,9 +46,25 @@ GROUP BY u.user_id, u.username, u.status
 ORDER BY u.user_id ASC; -- Sort sequentially by ID
 ";
 
-
+Console.WriteLine("\n\n-------------------   Statement Parsing Test:  --------------\n");
 var statements = Parser.ParseStatements(sqlstring);
 foreach (string s in statements)
 {
     Console.WriteLine(s);
+}
+
+// testing json deserialization
+
+Console.WriteLine("\n\n-------------------   JSON deserialization Test:  --------------\n");
+string indexString = File.ReadAllText("Prompts/v1.0/indexes.json");
+PromptConfig? indexPrompt = JsonSerializer.Deserialize<PromptConfig>(indexString, new JsonSerializerOptions {PropertyNameCaseInsensitive = true});
+if (indexPrompt != null)
+{
+    Console.WriteLine(indexPrompt);
+    Console.WriteLine("\n\n-------------------   FewShotExamples:  --------------\n");
+
+    foreach (string eg in indexPrompt.FewShotExamples)
+    {
+        Console.WriteLine(eg);
+    }
 }
