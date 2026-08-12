@@ -1,6 +1,5 @@
 ﻿using Parsers;
 using Prompts;
-using System.Text.Json;
 // test
 string sqlstring = @"
 /* =========================================================
@@ -56,8 +55,8 @@ foreach (string s in statements)
 // testing json deserialization
 
 Console.WriteLine("\n\n-------------------   JSON deserialization Test:  --------------\n");
-string indexString = File.ReadAllText("Prompts/v1.0/indexes.json");
-PromptConfig? indexPrompt = JsonSerializer.Deserialize<PromptConfig>(indexString, new JsonSerializerOptions {PropertyNameCaseInsensitive = true});
+
+PromptConfig? indexPrompt = PromptLoader.LoadPrompt("indexes","v1.0");
 if (indexPrompt != null)
 {
     Console.WriteLine(indexPrompt);
