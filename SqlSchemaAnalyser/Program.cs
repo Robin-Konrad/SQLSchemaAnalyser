@@ -1,5 +1,19 @@
-﻿using Parsers;
+﻿using LlmClient;
+using Parsers;
 using Prompts;
+using DotNetEnv;
+
+Env.Load(); 
+
+string apiKey = Environment.GetEnvironmentVariable("AZURE_OPENAI_KEY")
+    ?? throw new InvalidOperationException("AZURE_OPENAI_KEY not set in .env");
+
+string endpoint = Environment.GetEnvironmentVariable("AZURE_OPENAI_ENDPOINT")
+    ?? throw new InvalidOperationException("AZURE_OPENAI_ENDPOINT not set in .env");
+
+string deploymentName = Environment.GetEnvironmentVariable("AZURE_OPENAI_DEPLOYMENT")
+    ?? throw new InvalidOperationException("AZURE_OPENAI_DEPLOYMENT not set in .env");
+
 // test
 string sqlstring = @"
 /* =========================================================
@@ -66,4 +80,14 @@ if (indexPrompt != null)
     {
         Console.WriteLine(eg);
     }
+
+
+    Console.WriteLine("\n\n-------------------   Azure OpenAi Client Test:  --------------\n");
+    // testing azure OpenAi client
+
+    AnalysisClient client = new AnalysisClient(apiKey, endpoint, deploymentName);
+    string response = await client.QueryApi(indexPrompt, sqlstring);
+    Console.WriteLine(response);
 }
+
+
