@@ -8,7 +8,7 @@ public record PromptConfig(
 );
 
 public record ModelSettings(
-    double Temperature,
+    float Temperature,
     int MaxTokens
 );
 
