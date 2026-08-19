@@ -22,8 +22,8 @@ public class AnalysisClient
 
         var options = new ChatCompletionOptions
             {
-                // ChatCompleteionOptions
-                // I am using gpt-5-mini whih only suuports 1 for temperature, and not working with max tokens
+                // I am using gpt-5-mini which only supports default value (1) for temperature, and doesn't work with max tokens
+                // if using a different compatible model uncomment the following parameters to use modelSettings:
 
                 // Temperature = modelSettings.Temperature
                 // MaxOutputTokenCount = modelSettings.MaxTokens
