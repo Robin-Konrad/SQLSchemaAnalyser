@@ -2,6 +2,8 @@
 using Parsers;
 using Prompts;
 using DotNetEnv;
+using Models;
+using System.Text.Json;
 
 Env.Load(); 
 
@@ -66,8 +68,7 @@ foreach (string s in statements)
     Console.WriteLine(s);
 }
 
-// testing json deserialization
-
+// testing json deserialization in LoadPrompt
 Console.WriteLine("\n\n-------------------   JSON deserialization Test:  --------------\n");
 
 PromptConfig? indexPrompt = PromptLoader.LoadPrompt("indexes","v1.0");
@@ -87,7 +88,22 @@ if (indexPrompt != null)
 
     AnalysisClient client = new AnalysisClient(apiKey, endpoint, deploymentName);
     string response = await client.QueryApi(indexPrompt, sqlstring);
-    Console.WriteLine(response);
+    // string response = File.ReadAllText("../../testing.txt");          // temporary local testing purposes------------------------------------
+
+    // parse raw response into findings.cs    
+    List<Finding>? findings = JsonSerializer.Deserialize<List<Finding>>(response, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+
+    if (findings == null)
+    {
+        Console.WriteLine("Error: null response from OpenAI Client");
+    }
+    else
+    {
+        foreach (Finding finding in findings)
+        {
+            Console.WriteLine(finding);
+        }
+    }
 }
 
 
