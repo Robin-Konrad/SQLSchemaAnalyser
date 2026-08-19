@@ -17,7 +17,7 @@ public class AnalysisPipeline
         // to be completed
     }
 
-    private static void BuildReport(Findings findings)
+    private static void BuildReport(List<Finding> findings)
     {
         // to be completed
     }
