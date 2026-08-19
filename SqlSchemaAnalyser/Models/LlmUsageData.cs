@@ -1,10 +1,10 @@
 namespace Models;
 
 public record LlmUsageData (
-    string LlmModel,
+    string Model,
     int InputTokens,
     int OutputTokens,
     double LatencyMs,
     string PromptVersion,
-    DateTime TimeStamp
+    DateTime Timestamp
 );
