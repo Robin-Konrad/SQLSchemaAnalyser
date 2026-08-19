@@ -1,5 +1,7 @@
 namespace LlmClient;
 
+using Models;
+using System.Diagnostics;
 using Prompts;
 using Azure;
 using Azure.AI.OpenAI;
@@ -8,13 +10,15 @@ using OpenAI.Chat;
 public class AnalysisClient
 {
     private ChatClient client;
+    private string deploymentName;
     public AnalysisClient(string apiKey, string endpoint, string deploymentName)
     {
         var azureClient = new AzureOpenAIClient(new Uri(endpoint), new AzureKeyCredential(apiKey));
         client = azureClient.GetChatClient(deploymentName);
+        this.deploymentName = deploymentName;
     }
     
-    public async Task<string> QueryApi(PromptConfig pc, string schema)
+    public async Task<(string ResponseText, LlmUsageData UsageData)> QueryApi(PromptConfig pc, string schema)
     {
         string systemPrompt = pc.SystemPrompt;
         string[] fewShotExamples = pc.FewShotExamples;
@@ -38,10 +42,21 @@ public class AnalysisClient
             new UserChatMessage(schema)
         };
 
+        DateTime timestamp = DateTime.UtcNow;  // timestamp of when call was made
+        var stopwatch = Stopwatch.StartNew();  // track LatencyMs
         ChatCompletion completion = await client.CompleteChatAsync(messages, options);  // make network call to azure openai
+        stopwatch.Stop();
 
-        return completion.Content[0].Text;   // just asking for plain text back, so Content collection will only have one item
+        
+        LlmUsageData data = new LlmUsageData(
+            Model: this.deploymentName,
+            InputTokens: completion.Usage.InputTokenCount,
+            OutputTokens: completion.Usage.OutputTokenCount,
+            LatencyMs: stopwatch.Elapsed.TotalMilliseconds,
+            PromptVersion: pc.Version,
+            Timestamp: timestamp
+        );
+
+        return (completion.Content[0].Text, data);   // just asking for plain text back, so completion.Content collection will only have one item
     }
-
-
 }

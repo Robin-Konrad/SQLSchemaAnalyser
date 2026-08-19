@@ -87,12 +87,13 @@ if (indexPrompt != null)
     // testing azure OpenAi client
 
     AnalysisClient client = new AnalysisClient(apiKey, endpoint, deploymentName);
-    string response = await client.QueryApi(indexPrompt, sqlstring);
-    // string response = File.ReadAllText("../../testing.txt");          // temporary local testing purposes------------------------------------
+    var response = await client.QueryApi(indexPrompt, sqlstring);
 
     // parse raw response into findings.cs    
-    List<Finding>? findings = JsonSerializer.Deserialize<List<Finding>>(response, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+    List<Finding>? findings = JsonSerializer.Deserialize<List<Finding>>(response.ResponseText, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
 
+    Console.WriteLine(response.UsageData);
+    
     if (findings == null)
     {
         Console.WriteLine("Error: null response from OpenAI Client");
