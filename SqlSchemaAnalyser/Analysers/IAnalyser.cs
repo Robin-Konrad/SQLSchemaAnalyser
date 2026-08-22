@@ -1,8 +1,9 @@
-namespace SqlSchemaAnalyser.Analysers;
+namespace Analysers;
+
+using Models;
+
 public interface IAnalyser
     {
-        public string Category {get;}  // tells what type of analysing the analyser is doing
-        
-        public Task<string> AnalyseAsync(string schema); //analyse schema and return findings
+        public Task<(List<Finding> Findings, LlmUsageData Usage)> AnalyseAsync(string schema); //analyse schema and return findings
 
     }
