@@ -71,7 +71,7 @@ foreach (string s in statements)
 // testing json deserialization in LoadPrompt
 Console.WriteLine("\n\n-------------------   JSON deserialization Test:  --------------\n");
 
-PromptConfig? indexPrompt = PromptLoader.LoadPrompt("indexes","v1.0");
+PromptConfig? indexPrompt = PromptLoader.LoadPrompt("indexes");
 if (indexPrompt != null)
 {
     Console.WriteLine(indexPrompt);
