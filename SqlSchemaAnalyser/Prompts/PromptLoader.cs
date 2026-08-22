@@ -1,6 +1,7 @@
 // find correct prompt and load into PromptConfig JSON
 using Prompts;
 using System.Text.Json;
+
 public class PromptLoader
 {
     // loads from specified category
@@ -19,7 +20,7 @@ public class PromptLoader
 
     }
 
-    // load from a specific prompt filepath if needed
+    // load from a specific prompt filepath 
     public static PromptConfig? LoadPath(string path)
     {
         string indexString = File.ReadAllText(path);
