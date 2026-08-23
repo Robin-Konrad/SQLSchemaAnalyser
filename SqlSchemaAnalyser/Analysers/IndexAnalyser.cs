@@ -17,12 +17,11 @@ public class IndexAnalyser : IAnalyser
         this.promptVersion = promptVersion;
     }
 
-    public async Task<(List<Finding> Findings, LlmUsageData Usage)> AnalyseAsync(string schema) {
+    public async Task<(List<Finding> Findings, LlmUsageData Usage)> AnalyseAsync(List<string> statements) {
 
         // filter schema to only include table or index statements as these are the only ones relevant to index analysing
-        string[] allStatements = Parser.ParseStatements(schema);
 
-        List<string> relevantStatements = allStatements
+        List<string> relevantStatements = statements
             .Where(s => s.StartsWith("CREATE TABLE", StringComparison.OrdinalIgnoreCase)
                     || s.StartsWith("ALTER TABLE", StringComparison.OrdinalIgnoreCase)
                     || s.StartsWith("CREATE INDEX", StringComparison.OrdinalIgnoreCase)

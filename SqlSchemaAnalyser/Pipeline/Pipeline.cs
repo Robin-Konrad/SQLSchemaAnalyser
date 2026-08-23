@@ -1,19 +1,25 @@
 using Models;
+using Parsers;
+
 public class AnalysisPipeline
 {
     private static void PreProcess(string sqlstring)
     {
-        // to be completed
-    }
+        sqlstring = CommentStripper.StripComments(sqlstring);
+        List<string> statements = Parser.ParseStatements(sqlstring);
 
-    private static void Analyse(string schema, int tablecount)
-    {
+        int tablecount = CountTables.Count(statements);
         // only analyse schemas with at least 1 table to not waste API calls on non existent schemas
         if (tablecount < 1)
         {
             throw new ArgumentException("No CREATE TABLE statements found in schema.");
         }
 
+        Analyse(statements)
+    }
+
+    private static void Analyse(List<string> statements)
+    {
         // to be completed
     }
 

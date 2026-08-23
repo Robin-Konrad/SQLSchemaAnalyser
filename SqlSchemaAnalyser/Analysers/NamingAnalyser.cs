@@ -17,12 +17,11 @@ public class NamingAnalyser : IAnalyser
         this.promptVersion = promptVersion;
     }
 
-    public async Task<(List<Finding> Findings, LlmUsageData Usage)> AnalyseAsync(string schema) {
+    public async Task<(List<Finding> Findings, LlmUsageData Usage)> AnalyseAsync(List<string> statements) {
 
         // filter schema to only include CREATE TABLE or ALTER TABLE statements as these are the only ones relevant to naming analysing
-        string[] allStatements = Parser.ParseStatements(schema);
 
-        List<string> relevantStatements = allStatements
+        List<string> relevantStatements = statements
             .Where(s => s.StartsWith("CREATE TABLE", StringComparison.OrdinalIgnoreCase)
                     || s.StartsWith("ALTER TABLE", StringComparison.OrdinalIgnoreCase))
             .ToList();

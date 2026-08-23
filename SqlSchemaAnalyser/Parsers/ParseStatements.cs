@@ -2,7 +2,7 @@ namespace Parsers;
 using System.Text;
 public class Parser 
 {
-    public static string[] ParseStatements(string sqlstring)   // assumes comments already stripped from string
+    public static List<string> ParseStatements(string sqlstring)   // assumes comments already stripped from string
     {
         sqlstring = CommentStripper.StripComments(sqlstring);  // strip string of comments before parsing
 
@@ -29,6 +29,6 @@ public class Parser
                 current.Append(c);
             }
         }
-        return statements.Where(s => !string.IsNullOrWhiteSpace(s)).Select(s => s.Trim()).ToArray();  // remove empty statements 
+        return statements.Where(s => !string.IsNullOrWhiteSpace(s)).Select(s => s.Trim()).ToList();  // remove empty statements 
     }
 }
