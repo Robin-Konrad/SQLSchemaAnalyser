@@ -4,6 +4,7 @@ using Prompts;
 using DotNetEnv;
 using Models;
 using System.Text.Json;
+using Analysers;
 
 Env.Load(); 
 
@@ -68,43 +69,40 @@ foreach (string s in statements)
     Console.WriteLine(s);
 }
 
+
+
 // testing json deserialization in LoadPrompt
 Console.WriteLine("\n\n-------------------   JSON deserialization Test:  --------------\n");
 
-PromptConfig? indexPrompt = PromptLoader.LoadPrompt("indexes");
-if (indexPrompt != null)
+PromptConfig indexPrompt = PromptLoader.LoadPrompt("indexes");
+Console.WriteLine(indexPrompt);
+Console.WriteLine("\n\n-------------------   FewShotExamples:  --------------\n");
+
+foreach (string eg in indexPrompt.FewShotExamples)
 {
-    Console.WriteLine(indexPrompt);
-    Console.WriteLine("\n\n-------------------   FewShotExamples:  --------------\n");
-
-    foreach (string eg in indexPrompt.FewShotExamples)
-    {
-        Console.WriteLine(eg);
-    }
-
-
-    Console.WriteLine("\n\n-------------------   Azure OpenAi Client Test:  --------------\n");
-    // testing azure OpenAi client
-
-    AnalysisClient client = new AnalysisClient(apiKey, endpoint, deploymentName);
-    var response = await client.QueryApi(indexPrompt, sqlstring);
-
-    // parse raw response into findings.cs    
-    List<Finding>? findings = JsonSerializer.Deserialize<List<Finding>>(response.ResponseText, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
-
-    Console.WriteLine(response.UsageData);
-    
-    if (findings == null)
-    {
-        Console.WriteLine("Error: null response from OpenAI Client");
-    }
-    else
-    {
-        foreach (Finding finding in findings)
-        {
-            Console.WriteLine(finding);
-        }
-    }
+    Console.WriteLine(eg);
 }
+
+
+Console.WriteLine("\n\n-------------------   Azure OpenAi Client Test:  --------------\n");
+
+// create openAi client and run pipeline
+AnalysisClient client = new AnalysisClient(apiKey, endpoint, deploymentName);
+
+List<IAnalyser> analysers = new List<IAnalyser>
+{
+    new IndexAnalyser(client),
+    new NamingAnalyser(client),
+    new NormalizationAnalyser(client)
+};
+
+
+
+var AP = new AnalysisPipeline(analysers);
+string report = await AP.Run(sqlstring);   // run the pipeline
+
+Console.WriteLine(report);
+
+
 
 

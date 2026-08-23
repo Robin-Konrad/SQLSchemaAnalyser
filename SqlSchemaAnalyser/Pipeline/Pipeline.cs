@@ -1,9 +1,28 @@
 using Models;
 using Parsers;
+using Analysers;
+using System.Text;
 
 public class AnalysisPipeline
 {
-    private static void PreProcess(string sqlstring)
+    private List<IAnalyser> analysers;
+
+    public AnalysisPipeline(List<IAnalyser> analysers) {
+        this.analysers = analysers;
+    }
+    
+    public async Task<string> Run(string sqlstring){
+
+        List<string> statements = PreProcess(sqlstring);   // strip comments and get list of statements
+
+        var analysis = await Analyse(statements);          // get analysis on list of statements
+
+        string report = BuildReport(analysis.allFindings);          // build markdown report of findings
+
+        return report;
+    }
+
+    private List<string> PreProcess(string sqlstring)
     {
         sqlstring = CommentStripper.StripComments(sqlstring);
         List<string> statements = Parser.ParseStatements(sqlstring);
@@ -15,16 +34,46 @@ public class AnalysisPipeline
             throw new ArgumentException("No CREATE TABLE statements found in schema.");
         }
 
-        Analyse(statements)
+        return statements;
     }
 
-    private static void Analyse(List<string> statements)
+    private async Task<(List<Finding> allFindings, List<LlmUsageData> allUsageData)> Analyse(List<string> statements)
     {
-        // to be completed
+        List<Finding> allFindings = new List<Finding>();
+        List<LlmUsageData> allUsageData = new List<LlmUsageData>();
+
+        foreach (IAnalyser analyser in this.analysers)
+        {
+            var results = await analyser.AnalyseAsync(statements);
+            allFindings.AddRange(results.Findings);  // adds all items in list Findings to list allFindings
+            allUsageData.Add(results.Usage);
+        }
+
+        return (allFindings, allUsageData);
     }
 
-    private static void BuildReport(List<Finding> findings)
+    private string BuildReport(List<Finding> findings)
     {
-        // to be completed
+        StringBuilder sb = new StringBuilder();
+
+        sb.AppendLine("# SQL Schema Analysis Report\n");
+
+        var groupedFindings = findings.GroupBy(f => f.Severity);
+
+        foreach (var group in groupedFindings)
+        {
+            sb.AppendLine($"## {group.Key} findings\n");
+            sb.AppendLine("| Table | Column | Issue | Suggestion |");
+            sb.AppendLine("|---|---|---|---|");
+
+            foreach (Finding finding in group)
+            {
+                sb.AppendLine($"| {finding.Table} | {finding.Column} | {finding.Issue} | {finding.Suggestion} |");
+            }
+
+            sb.AppendLine();
+        }
+
+        return sb.ToString();
     }
 }
