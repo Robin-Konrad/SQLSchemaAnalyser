@@ -19,12 +19,14 @@ public class IndexAnalyser : IAnalyser
 
     public async Task<(List<Finding> Findings, LlmUsageData Usage)> AnalyseAsync(string schema) {
 
-        // filter schema to only include CREATE TABLE or ALTER TABLE statements as these are the only ones relevant to index analysing
+        // filter schema to only include table or index statements as these are the only ones relevant to index analysing
         string[] allStatements = Parser.ParseStatements(schema);
 
         List<string> relevantStatements = allStatements
             .Where(s => s.StartsWith("CREATE TABLE", StringComparison.OrdinalIgnoreCase)
-                    || s.StartsWith("ALTER TABLE", StringComparison.OrdinalIgnoreCase))
+                    || s.StartsWith("ALTER TABLE", StringComparison.OrdinalIgnoreCase)
+                    || s.StartsWith("CREATE INDEX", StringComparison.OrdinalIgnoreCase)
+                    || s.StartsWith("CREATE UNIQUE INDEX", StringComparison.OrdinalIgnoreCase))
             .ToList();
 
         string filteredSchema = string.Join("\n", relevantStatements);
