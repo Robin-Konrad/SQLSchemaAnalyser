@@ -58,7 +58,11 @@ public class AnalysisPipeline
 
         sb.AppendLine("# SQL Schema Analysis Report\n");
 
-        var groupedFindings = findings.GroupBy(f => f.Severity);
+        string[] severityOrder = { "warning", "suggestion", "info" };
+
+        var groupedFindings = findings                  
+            .GroupBy(f => f.Severity)
+            .OrderBy(g => Array.IndexOf(severityOrder, g.Key.ToLower()));      // make report always be in order warning, suggestion, info
 
         foreach (var group in groupedFindings)
         {
