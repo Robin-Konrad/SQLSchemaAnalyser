@@ -1,4 +1,4 @@
-namespace SchemaLens.Parsers;
+namespace Parsers;
 using System.Text.RegularExpressions;
 
 public class CountTables
