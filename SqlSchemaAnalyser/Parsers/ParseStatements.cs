@@ -29,6 +29,6 @@ public class Parser
                 current.Append(c);
             }
         }
-        return statements.Where(s => !string.IsNullOrWhiteSpace(s)).ToArray();  // remove empty statements 
+        return statements.Where(s => !string.IsNullOrWhiteSpace(s)).Select(s => s.Trim()).ToArray();  // remove empty statements 
     }
 }
