@@ -5,6 +5,7 @@ using DotNetEnv;
 using Models;
 using System.Text.Json;
 using Analysers;
+using Evaluation;
 
 Env.Load(); 
 
@@ -84,12 +85,11 @@ foreach (string eg in indexPrompt.FewShotExamples)
 }
 
 
-Console.WriteLine("\n\n-------------------   Azure OpenAi Client Test:  --------------\n");
-
-// create openAi client and run pipeline
+// create openAi client -----------------------------
 AnalysisClient client = new AnalysisClient(apiKey, endpoint, deploymentName);
 
-List<IAnalyser> analysers = new List<IAnalyser>
+// create analysers
+var analysers = new List<IAnalyser>
 {
     new IndexAnalyser(client),
     new NamingAnalyser(client),
@@ -97,11 +97,36 @@ List<IAnalyser> analysers = new List<IAnalyser>
 };
 
 
+//----------------------------------------------------------
 
-var AP = new AnalysisPipeline(analysers);
-string report = await AP.Run(sqlstring);   // run the pipeline
 
-Console.WriteLine(report);
+
+
+
+Console.WriteLine("\n\n-------------------   Evaluation Run:  --------------\n");
+
+var evaluator = new Evaluator();
+List<EvaluationResult> results = await evaluator.RunAsync(analysers);
+
+foreach (var result in results)
+{
+    Console.WriteLine($"{result.TestCaseName}: DetectionRate={result.DetectionRate}, Correctness={result.Correctness}");
+    if (result.Missed.Count > 0)
+        Console.WriteLine($"  Missed: {string.Join(", ", result.Missed.Select(m => $"{m.Table}.{m.Column}"))}");
+    if (result.Unexpected.Count > 0)
+        Console.WriteLine($"  Unexpected: {string.Join(", ", result.Unexpected.Select(u => $"{u.Table}.{u.Column}"))}");
+}
+
+
+// Console.WriteLine("\n\n-------------------   Azure OpenAi Client Test:  --------------\n");
+
+
+// var AP = new AnalysisPipeline(analysers);
+// string report = await AP.Run(sqlstring);   // run the pipeline
+
+// Console.WriteLine(report);
+
+
 
 
 
