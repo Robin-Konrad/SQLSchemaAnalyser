@@ -1,0 +1,20 @@
+[
+  { "category": "indexes", "table": "addresses", "column": "cust_id" },
+  { "category": "indexes", "table": "orders", "column": "cust_id" },
+  { "category": "indexes", "table": "orders", "column": "ship_addr_id" },
+  { "category": "indexes", "table": "orders", "column": "order_status" },
+  { "category": "indexes", "table": "order_items", "column": "order_id" },
+  { "category": "indexes", "table": "order_items", "column": "prod_id" },
+  { "category": "indexes", "table": "customers", "column": "email_address" },
+
+  { "category": "naming", "table": "addresses", "column": "cust_id" },
+  { "category": "naming", "table": "orders", "column": "cust_id" },
+  { "category": "naming", "table": "order_items", "column": "prod_id" },
+  { "category": "naming", "table": "orders", "column": "ship_addr_id" },
+  { "category": "naming", "table": "addresses", "column": "line1" },
+
+  { "category": "normalization", "table": "order_items", "column": "product_name" },
+  { "category": "normalization", "table": "products", "column": "category_name" },
+  { "category": "normalization", "table": "customers", "column": "phone1" },
+  { "category": "normalization", "table": "customers", "column": "phone2" }
+]

@@ -1,0 +1,21 @@
+[
+  { "category": "indexes", "table": "employees", "column": "dept_id" },
+  { "category": "indexes", "table": "employees", "column": "office_id" },
+  { "category": "indexes", "table": "projects", "column": "dept_id" },
+  { "category": "indexes", "table": "employee_projects", "column": "emp_id" },
+  { "category": "indexes", "table": "employee_projects", "column": "proj_id" },
+  { "category": "indexes", "table": "employees", "column": "status" },
+  { "category": "indexes", "table": "projects", "column": "proj_status" },
+  { "category": "indexes", "table": "projects", "column": "start_date" },
+
+  { "category": "naming", "table": "employees", "column": "emp_name" },
+  { "category": "naming", "table": "employees", "column": "emp_email" },
+  { "category": "naming", "table": "departments", "column": "dept_name" },
+  { "category": "naming", "table": "projects", "column": "proj_status" },
+  { "category": "naming", "table": "employee_projects", "column": "emp_id" },
+  { "category": "naming", "table": "employee_projects", "column": "proj_id" },
+
+  { "category": "normalization", "table": "employees", "column": "department_name" },
+  { "category": "normalization", "table": "departments", "column": "manager_name" },
+  { "category": "normalization", "table": "employees", "column": "salary" }
+]
