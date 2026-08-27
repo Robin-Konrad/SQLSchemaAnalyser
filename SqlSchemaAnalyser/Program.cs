@@ -63,26 +63,7 @@ GROUP BY u.user_id, u.username, u.status
 ORDER BY u.user_id ASC; -- Sort sequentially by ID
 ";
 
-Console.WriteLine("\n\n-------------------   Statement Parsing Test:  --------------\n");
-var statements = Parser.ParseStatements(sqlstring);
-foreach (string s in statements)
-{
-    Console.WriteLine(s);
-}
 
-
-
-// testing json deserialization in LoadPrompt
-Console.WriteLine("\n\n-------------------   JSON deserialization Test:  --------------\n");
-
-PromptConfig indexPrompt = PromptLoader.LoadPrompt("indexes", "v1.0");
-Console.WriteLine(indexPrompt);
-Console.WriteLine("\n\n-------------------   FewShotExamples:  --------------\n");
-
-foreach (string eg in indexPrompt.FewShotExamples)
-{
-    Console.WriteLine(eg);
-}
 
 
 // create openAi client -----------------------------
@@ -97,57 +78,9 @@ var analysers = new List<IAnalyser>
 };
 
 
-//----------------------------------------------------------
-
-
-
-
-
-Console.WriteLine("\n\n-------------------   Evaluation Run:  --------------\n");
-
+Console.WriteLine("\n\n-------------------   Evaluation Testing:  --------------\n");
 var evaluator = new Evaluator();
-List<EvaluationResult> results = await evaluator.RunAsync(analysers);
-
-foreach (var result in results)
-{
-    Console.WriteLine(
-        $"{result.TestCaseName}: DetectionRate={result.DetectionRate}, Correctness={result.Correctness}");
-
-    if (result.Missed.Count > 0)
-        Console.WriteLine(
-            $"  Missed: {string.Join(", ", result.Missed.Select(m => $"{m.Table}.{m.Column}"))}");
-
-    if (result.Unexpected.Count > 0)
-        Console.WriteLine(
-            $"  Unexpected: {string.Join(", ", result.Unexpected.Select(u => $"{u.Table}.{u.Column}"))}");
-}
-
-Console.WriteLine("\n-------------------   Category Averages:  -------------------\n");
-
-var categories = new[] { "indexes", "naming", "normalization" };
-
-foreach (var category in categories)
-{
-    var categoryResults = results
-        .Where(r => r.Category.Contains(category))
-        .ToList();
-
-    if (categoryResults.Count == 0)
-    {
-        Console.WriteLine($"{category}: No results");
-        continue;
-    }
-
-    var averageDetectionRate = categoryResults.Average(r => r.DetectionRate);
-    var averageCorrectness = categoryResults.Average(r => r.Correctness);
-
-    Console.WriteLine(
-        $"{category}: " +
-        $"Average DetectionRate={averageDetectionRate:F2}, " +
-        $"Average Correctness={averageCorrectness:F2}");
-}
-
-
+await evaluator.Evaluate(analysers);   // runs the evaluator and prints evaluation output to console
 
 // Console.WriteLine("\n\n-------------------   Azure OpenAi Client Test:  --------------\n");
 

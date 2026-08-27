@@ -9,7 +9,56 @@ public class Evaluator
 {
     private const string TestCasesDir = "Evaluation/TestCases";
 
-    public async Task<List<EvaluationResult>> RunAsync(List<IAnalyser> analysers)
+    public async Task Evaluate(List<IAnalyser> analysers) {
+
+        List<EvaluationResult> results = await RunAsync(analysers);  // get a list of EvaluationResults records
+
+        Console.WriteLine("\n\n-------------------   Evaluation Run:  --------------\n");
+
+        // for each record write to console the results
+        foreach (var result in results) 
+        {
+            Console.WriteLine(
+                $"{result.TestCaseName}: DetectionRate={result.DetectionRate}, Correctness={result.Correctness}");
+
+            if (result.Missed.Count > 0)
+                Console.WriteLine(
+                    $"  Missed: {string.Join(", ", result.Missed.Select(m => $"{m.Table}.{m.Column}"))}");
+
+            if (result.Unexpected.Count > 0)
+                Console.WriteLine(
+                    $"  Unexpected: {string.Join(", ", result.Unexpected.Select(u => $"{u.Table}.{u.Column}"))}");
+        }
+
+
+        Console.WriteLine("\n-------------------   Category Averages:  -------------------\n");
+
+        // for each category calculate the average DetectionRate and Correctness scores and write to console
+        var categories = new[] { "indexes", "naming", "normalization" };
+
+        foreach (var category in categories)
+        {
+            var categoryResults = results
+                .Where(r => r.Category.Contains(category))
+                .ToList();
+
+            if (categoryResults.Count == 0)
+            {
+                Console.WriteLine($"{category}: No results");
+                continue;
+            }
+
+            var averageDetectionRate = categoryResults.Average(r => r.DetectionRate);
+            var averageCorrectness = categoryResults.Average(r => r.Correctness);
+
+            Console.WriteLine(
+                $"{category}: " +
+                $"Average DetectionRate={averageDetectionRate:F2}, " +
+                $"Average Correctness={averageCorrectness:F2}");
+        }
+    }
+
+    private async Task<List<EvaluationResult>> RunAsync(List<IAnalyser> analysers)
     {
         List<EvaluationResult> results = new List<EvaluationResult>();  // list for all the test cases EvalutionResults
 
