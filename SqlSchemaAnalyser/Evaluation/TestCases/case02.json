@@ -4,15 +4,21 @@
   { "category": "indexes", "table": "posts", "column": "status" },
   { "category": "indexes", "table": "comments", "column": "post_id" },
   { "category": "indexes", "table": "comments", "column": "approved" },
-  { "category": "indexes", "table": "newsletter_subscribers", "column": "sub_email" },
   { "category": "indexes", "table": "newsletter_subscribers", "column": "fav_category_id" },
+  { "category": "indexes", "table": "newsletter_subscribers", "column": "subscribed_at"},
+  { "category": "indexes", "table": "comments", "column": "posted_at"},
 
   { "category": "naming", "table": "posts", "column": "cat_id" },
   { "category": "naming", "table": "newsletter_subscribers", "column": "sub_email" },
   { "category": "naming", "table": "posts", "column": "tag1" },
   { "category": "naming", "table": "posts", "column": "tag2" },
   { "category": "naming", "table": "posts", "column": "tag3" },
-  { "category": "naming", "table": "comments", "column": "approved" },
+
+  { "category": "naming", "table": "posts", "column": "cat_id"},
+  {"category": "naming", "table": "newsletter_subscribers", "column": "sub_email"},
+  {"category": "naming", "table": "newsletter_subscribers", "column": "fav_category_id"},
+  {"category": "naming", "table": "newsletter_subscribers", "column": "fav_category_name"},
+  {"category": "naming", "table": "posts", "column": "status"},
 
   { "category": "normalization", "table": "posts", "column": "tag1" },
   { "category": "normalization", "table": "posts", "column": "tag2" },
