@@ -1,0 +1,21 @@
+-------------------   Evaluation Run:  --------------
+
+case02: DetectionRate=1, Correctness=1
+case02: DetectionRate=1, Correctness=1.25
+case02: DetectionRate=1, Correctness=1
+case01: DetectionRate=1, Correctness=0.8888888888888888
+  Unexpected: customers.email_address
+case01: DetectionRate=0.8888888888888888, Correctness=0.8888888888888888
+  Missed: addresses.line1
+  Unexpected: orders.
+case01: DetectionRate=1, Correctness=1
+case03: DetectionRate=1, Correctness=1
+case03: DetectionRate=1, Correctness=0.8
+  Unexpected: employees.department_name, projects.dept_id
+case03: DetectionRate=1, Correctness=1
+
+-------------------   Category Averages:  -------------------
+
+indexes: Average DetectionRate=1.00, Average Correctness=0.96
+naming: Average DetectionRate=0.96, Average Correctness=0.98
+normalization: Average DetectionRate=1.00, Average Correctness=1.00
