@@ -1,3 +1,5 @@
+namespace Pipeline;
+
 using Models;
 using Parsers;
 using Analysers;
