@@ -94,7 +94,8 @@ public class Evaluator
         double correctness = actualFindings.Count == 0 ? 1.0 : (double)truePositives / actualFindings.Count;
 
         return new EvaluationResult(
-            TestCaseName: $"{testCase.Name} [{category}]",
+            TestCaseName: $"{testCase.Name}",
+            Category: category,
             DetectionRate: detectionRate,
             Correctness: correctness,
             Missed: missed,
