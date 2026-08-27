@@ -1,0 +1,25 @@
+case02: DetectionRate=1, Correctness=0.8
+  Unexpected: comments.commenter_email, newsletter_subscribers.sub_email
+case02: DetectionRate=0.9, Correctness=1.125
+  Missed: posts.status
+  Unexpected: comments.approved
+case02: DetectionRate=1, Correctness=0.6666666666666666
+  Unexpected: comments.commenter_name, comments.commenter_email
+case01: DetectionRate=0.875, Correctness=0.875
+  Missed: addresses.is_default
+  Unexpected: customers.email_address
+case01: DetectionRate=1, Correctness=0.8181818181818182
+  Unexpected: ., order_items.product_name
+case01: DetectionRate=1, Correctness=0.75
+  Unexpected: products.category_name
+case03: DetectionRate=1, Correctness=1
+case03: DetectionRate=1, Correctness=0.6666666666666666
+  Unexpected: employees.department_name, departments.manager_name, projects.dept_id, offices.office_name
+case03: DetectionRate=1, Correctness=0.3333333333333333
+  Unexpected: departments.manager_name, employee_projects.id
+
+-------------------   Category Averages:  -------------------
+
+indexes: Average DetectionRate=0.96, Average Correctness=0.89
+naming: Average DetectionRate=0.97, Average Correctness=0.87
+normalization: Average DetectionRate=1.00, Average Correctness=0.58
