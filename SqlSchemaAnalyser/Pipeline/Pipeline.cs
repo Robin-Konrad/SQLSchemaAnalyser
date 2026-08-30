@@ -4,6 +4,7 @@ using Models;
 using Parsers;
 using Analysers;
 using System.Text;
+using Observability;
 
 public class AnalysisPipeline
 {
@@ -49,6 +50,8 @@ public class AnalysisPipeline
             var results = await analyser.AnalyseAsync(statements);
             allFindings.AddRange(results.Findings);  // adds all items in list Findings to list allFindings
             allUsageData.Add(results.Usage);
+
+            UsageLogger.Log(results.Usage);  // log every LLM call to usage_log.jsonl
         }
 
         return (allFindings, allUsageData);

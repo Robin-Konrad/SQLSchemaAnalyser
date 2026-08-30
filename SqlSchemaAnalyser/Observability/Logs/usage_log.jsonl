@@ -1,0 +1,3 @@
+{"Model":"gpt-5-mini","Category":"indexes","InputTokens":1529,"OutputTokens":1032,"LatencyMs":8814.1947,"PromptVersion":"3.0","Timestamp":"2026-08-30T13:00:46.2892348Z"}
+{"Model":"gpt-5-mini","Category":"naming","InputTokens":1689,"OutputTokens":991,"LatencyMs":7847.7171,"PromptVersion":"3.0","Timestamp":"2026-08-30T13:00:55.116822Z"}
+{"Model":"gpt-5-mini","Category":"normalization","InputTokens":1818,"OutputTokens":550,"LatencyMs":6163.8472,"PromptVersion":"3.0","Timestamp":"2026-08-30T13:01:02.9665279Z"}
