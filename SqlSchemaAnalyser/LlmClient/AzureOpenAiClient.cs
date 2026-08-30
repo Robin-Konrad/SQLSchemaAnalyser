@@ -50,6 +50,7 @@ public class AnalysisClient
         
         LlmUsageData data = new LlmUsageData(
             Model: this.deploymentName,
+            Category: pc.Category, 
             InputTokens: completion.Usage.InputTokenCount,
             OutputTokens: completion.Usage.OutputTokenCount,
             LatencyMs: stopwatch.Elapsed.TotalMilliseconds,
